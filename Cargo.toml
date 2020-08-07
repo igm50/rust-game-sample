@@ -5,10 +5,5 @@ authors = ["kigimi"]
 edition = "2018"
 
 [dependencies]
-amethyst = "0.15.0"
-
-[features]
-default = ["vulkan"]
-empty = ["amethyst/empty"]
-metal = ["amethyst/metal"]
-vulkan = ["amethyst/vulkan"]
+ggez = "0.5"
+# cgmath = {version= "0.17", features=["mint"]}
