@@ -10,7 +10,7 @@ impl ggez::event::EventHandler for State {
         Ok(())
     }
 
-    fn draw(&mut self, ctx: &mut Context) -> GameResult {
+    fn draw(&mut self, _ctx: &mut Context) -> GameResult {
         println!("Hello ggez! dt = {}ns", self.dt.subsec_nanos());
         Ok(())
     }
@@ -22,7 +22,7 @@ pub fn main() {
     };
 
     let c = conf::Conf::new();
-    let (ref mut ctx, ref mut event_loop) = ContextBuilder::new("hello_ggez", "awesome_person")
+    let (ref mut ctx, ref mut event_loop) = ContextBuilder::new("sounder", "jintz")
         .conf(c)
         .build()
         .unwrap();
