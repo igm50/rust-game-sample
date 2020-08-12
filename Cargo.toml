@@ -1,9 +1,10 @@
 [package]
 name = "rust-game-sample"
 version = "0.1.0"
-authors = ["kigimi"]
+authors = ["jintz"]
 edition = "2018"
 
 [dependencies]
 ggez = "0.5"
-# cgmath = {version= "0.17", features=["mint"]}
+cgmath = {version= "0.17", features=["mint"]}
+mint = "0.5"
