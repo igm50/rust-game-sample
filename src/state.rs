@@ -13,10 +13,6 @@ impl MainState {
 
     Ok(MainState { image: image })
   }
-
-  fn draw_params(&self) -> graphics::DrawParam {
-    self.image.draw_param()
-  }
 }
 
 impl EventHandler for MainState {
@@ -27,7 +23,7 @@ impl EventHandler for MainState {
   fn draw(&mut self, ctx: &mut Context) -> GameResult {
     graphics::clear(ctx, graphics::Color::new(1.0, 1.0, 1.0, 0.0));
 
-    graphics::draw(ctx, &self.image, self.draw_params())?;
+    graphics::draw(ctx, &self.image, self.image.draw_param())?;
 
     graphics::present(ctx)
   }
@@ -41,8 +37,6 @@ impl EventHandler for MainState {
   }
 
   fn mouse_motion_event(&mut self, _ctx: &mut Context, _x: f32, _y: f32, dx: f32, dy: f32) {
-    if self.image.clicked {
-      self.image.add(dx, dy);
-    }
+    self.image.mouse_motion(dx, dy);
   }
 }

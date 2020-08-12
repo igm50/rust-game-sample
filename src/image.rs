@@ -6,7 +6,7 @@ pub struct Image {
   y: f32,
   scale_x: f32,
   scale_y: f32,
-  pub clicked: bool,
+  clicked: bool,
 }
 
 impl Image {
@@ -19,11 +19,6 @@ impl Image {
       scale_y: 0.5,
       clicked: false,
     }
-  }
-
-  pub fn add(&mut self, dx: f32, dy: f32) {
-    self.x = self.x + dx;
-    self.y = self.y + dy;
   }
 
   fn width(&self) -> f32 {
@@ -54,6 +49,13 @@ impl Image {
 
   pub fn un_click(&mut self) {
     self.clicked = false;
+  }
+
+  pub fn mouse_motion(&mut self, dx: f32, dy: f32) {
+    if self.clicked {
+      self.x += dx;
+      self.y += dy;
+    }
   }
 
   pub fn draw_param(&self) -> graphics::DrawParam {
