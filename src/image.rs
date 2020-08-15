@@ -1,3 +1,5 @@
+use crate::state;
+use ggez::input::mouse::MouseButton;
 use ggez::*;
 
 pub struct Image {
@@ -65,20 +67,20 @@ impl Image {
   }
 }
 
-impl graphics::Drawable for Image {
-  fn draw(&self, ctx: &mut Context, param: graphics::DrawParam) -> GameResult {
-    self.image.draw(ctx, param)
+impl state::DrawItem for Image {
+  fn draw(&self, ctx: &mut Context) -> GameResult {
+    graphics::draw(ctx, &self.image, self.draw_param())
   }
 
-  fn dimensions(&self, _ctx: &mut Context) -> Option<graphics::Rect> {
-    Some(self.image.dimensions())
+  fn mouse_button_down_event(&mut self, _ctx: &mut Context, _button: MouseButton, x: f32, y: f32) {
+    self.click(x, y);
   }
 
-  fn set_blend_mode(&mut self, mode: Option<graphics::BlendMode>) {
-    self.image.set_blend_mode(mode);
+  fn mouse_button_up_event(&mut self, _ctx: &mut Context, _button: MouseButton, _x: f32, _y: f32) {
+    self.un_click();
   }
 
-  fn blend_mode(&self) -> Option<graphics::BlendMode> {
-    self.image.blend_mode()
+  fn mouse_motion_event(&mut self, _ctx: &mut Context, _x: f32, _y: f32, dx: f32, dy: f32) {
+    self.mouse_motion(dx, dy);
   }
 }
