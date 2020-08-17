@@ -5,7 +5,7 @@ use ggez::*;
 use state::MainState;
 use std::boxed::Box;
 
-pub fn main() {
+fn main() {
     let resource_dir = std::path::Path::new("./resources");
 
     let c = conf::Conf::new();

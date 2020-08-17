@@ -43,24 +43,7 @@ impl Image {
     self.x_is_in_area(x) && self.y_is_in_area(y)
   }
 
-  pub fn click(&mut self, x: f32, y: f32) {
-    if self.is_in_area(x, y) {
-      self.clicked = true;
-    }
-  }
-
-  pub fn un_click(&mut self) {
-    self.clicked = false;
-  }
-
-  pub fn mouse_motion(&mut self, dx: f32, dy: f32) {
-    if self.clicked {
-      self.x += dx;
-      self.y += dy;
-    }
-  }
-
-  pub fn draw_param(&self) -> graphics::DrawParam {
+  fn draw_param(&self) -> graphics::DrawParam {
     graphics::DrawParam::new()
       .scale(mint::Vector2::from_slice(&[self.scale_x, self.scale_y]))
       .dest(cgmath::Point2::new(self.x, self.y))
@@ -73,14 +56,19 @@ impl state::DrawItem for Image {
   }
 
   fn mouse_button_down_event(&mut self, _ctx: &mut Context, _button: MouseButton, x: f32, y: f32) {
-    self.click(x, y);
+    if self.is_in_area(x, y) {
+      self.clicked = true;
+    }
   }
 
   fn mouse_button_up_event(&mut self, _ctx: &mut Context, _button: MouseButton, _x: f32, _y: f32) {
-    self.un_click();
+    self.clicked = false;
   }
 
   fn mouse_motion_event(&mut self, _ctx: &mut Context, _x: f32, _y: f32, dx: f32, dy: f32) {
-    self.mouse_motion(dx, dy);
+    if self.clicked {
+      self.x += dx;
+      self.y += dy;
+    }
   }
 }
