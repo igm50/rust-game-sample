@@ -1,5 +1,4 @@
 use crate::state;
-use ggez::input::mouse::MouseButton;
 use ggez::*;
 
 pub struct Image {
@@ -8,7 +7,6 @@ pub struct Image {
   y: f32,
   scale_x: f32,
   scale_y: f32,
-  clicked: bool,
 }
 
 impl Image {
@@ -19,28 +17,7 @@ impl Image {
       y: y,
       scale_x: 0.5,
       scale_y: 0.5,
-      clicked: false,
     }
-  }
-
-  fn width(&self) -> f32 {
-    f32::from(self.image.width()) * self.scale_x
-  }
-
-  fn height(&self) -> f32 {
-    f32::from(self.image.height()) * self.scale_y
-  }
-
-  fn x_is_in_area(&self, x: f32) -> bool {
-    self.x < x && x < (self.x + self.width())
-  }
-
-  fn y_is_in_area(&self, y: f32) -> bool {
-    self.y < y && y < (self.y + self.height())
-  }
-
-  fn is_in_area(&self, x: f32, y: f32) -> bool {
-    self.x_is_in_area(x) && self.y_is_in_area(y)
   }
 
   fn draw_param(&self) -> graphics::DrawParam {
@@ -53,22 +30,5 @@ impl Image {
 impl state::DrawItem for Image {
   fn draw(&self, ctx: &mut Context) -> GameResult {
     graphics::draw(ctx, &self.image, self.draw_param())
-  }
-
-  fn mouse_button_down_event(&mut self, _ctx: &mut Context, _button: MouseButton, x: f32, y: f32) {
-    if self.is_in_area(x, y) {
-      self.clicked = true;
-    }
-  }
-
-  fn mouse_button_up_event(&mut self, _ctx: &mut Context, _button: MouseButton, _x: f32, _y: f32) {
-    self.clicked = false;
-  }
-
-  fn mouse_motion_event(&mut self, _ctx: &mut Context, _x: f32, _y: f32, dx: f32, dy: f32) {
-    if self.clicked {
-      self.x += dx;
-      self.y += dy;
-    }
   }
 }
