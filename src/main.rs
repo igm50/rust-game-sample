@@ -1,16 +1,17 @@
-mod image;
+// mod image;
+mod phase;
 mod state;
 
 use ggez::*;
 use state::MainState;
 
-pub fn main() {
+fn main() {
     let resource_dir = std::path::Path::new("./resources");
 
-    let c = conf::Conf::new();
+    let conf = conf::Conf::new();
     let (ref mut ctx, ref mut event_loop) = ContextBuilder::new("sounder", "jintz")
         .add_resource_path(resource_dir)
-        .conf(c)
+        .conf(conf)
         .build()
         .unwrap();
 
