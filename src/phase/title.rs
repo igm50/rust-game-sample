@@ -1,20 +1,26 @@
-use crate::image::*;
 use crate::phase::*;
 use ggez::*;
 
 pub struct TitlePhase {
-  draw_items: Vec<Box<dyn DrawItem>>,
-  image_resources: ImageResources,
+  title: graphics::Text,
+  start: graphics::Text,
 }
 
 impl TitlePhase {
-  pub fn new(ctx: &mut Context) -> GameResult<Self> {
-    let image = DrawObject::new(300.0, 100.0);
-    let draw_items: Vec<Box<dyn DrawItem>> = vec![Box::from(image)];
+  pub fn new(_ctx: &mut Context) -> GameResult<Self> {
+    let title_fragment = graphics::TextFragment::new("Title")
+      .scale(graphics::Scale::uniform(150.0))
+      .color(graphics::Color::from([0.0, 0.0, 0.0, 1.0]));
+    let title = graphics::Text::new(title_fragment);
+
+    let start_fragment = graphics::TextFragment::new("Start")
+      .scale(graphics::Scale::uniform(150.0))
+      .color(graphics::Color::from([0.0, 0.0, 0.0, 1.0]));
+    let start = graphics::Text::new(start_fragment);
 
     Ok(Self {
-      draw_items: draw_items,
-      image_resources: ImageResources::new(ctx)?,
+      title: title,
+      start: start,
     })
   }
 }
@@ -25,9 +31,11 @@ impl GamePhase for TitlePhase {
   }
 
   fn draw(&self, ctx: &mut Context) -> GameResult {
-    for di in &self.draw_items {
-      di.draw(ctx, &self.image_resources)?;
-    }
+    let param = graphics::DrawParam::new().dest(cgmath::Point2::new(300.0, 100.0));
+    graphics::draw(ctx, &self.title, param)?;
+
+    let param = graphics::DrawParam::new().dest(cgmath::Point2::new(300.0, 300.0));
+    graphics::draw(ctx, &self.start, param)?;
 
     Ok(())
   }
