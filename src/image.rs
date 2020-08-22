@@ -1,18 +1,37 @@
 use crate::state;
 use ggez::*;
 
-pub struct Image {
-  image: graphics::Image,
+pub struct ImageResources {
+  resources: Vec<graphics::Image>,
+}
+
+impl ImageResources {
+  pub fn new(ctx: &mut Context) -> GameResult<Self> {
+    let image_gu = graphics::Image::new(ctx, "/janken_gu.png")?;
+
+    Ok(Self {
+      resources: vec![image_gu],
+    })
+  }
+
+  pub fn gu(&self) -> &graphics::Image {
+    match self.resources.get(0) {
+      Some(gu) => gu,
+      None => panic!("画像が見つかりません"),
+    }
+  }
+}
+
+pub struct DrawObject {
   x: f32,
   y: f32,
   scale_x: f32,
   scale_y: f32,
 }
 
-impl Image {
-  pub fn new(image: graphics::Image, x: f32, y: f32) -> Self {
+impl DrawObject {
+  pub fn new(x: f32, y: f32) -> Self {
     Self {
-      image: image,
       x: x,
       y: y,
       scale_x: 0.5,
@@ -27,8 +46,8 @@ impl Image {
   }
 }
 
-impl state::DrawItem for Image {
-  fn draw(&self, ctx: &mut Context) -> GameResult {
-    graphics::draw(ctx, &self.image, self.draw_param())
+impl state::DrawItem for DrawObject {
+  fn draw(&self, ctx: &mut Context, image_resources: &ImageResources) -> GameResult {
+    graphics::draw(ctx, image_resources.gu(), self.draw_param())
   }
 }
