@@ -2,6 +2,7 @@ use crate::phase::*;
 use ggez::*;
 
 pub struct TitlePhase {
+  action: PhaseAction,
   title: graphics::Text,
   start: graphics::Text,
 }
@@ -19,6 +20,7 @@ impl TitlePhase {
     let start = graphics::Text::new(start_fragment);
 
     Ok(Self {
+      action: PhaseAction::Continue,
       title: title,
       start: start,
     })
@@ -26,8 +28,8 @@ impl TitlePhase {
 }
 
 impl GamePhase for TitlePhase {
-  fn update(&mut self, _ctx: &mut Context) -> PhaseAction {
-    PhaseAction::Continue
+  fn update(&mut self, _ctx: &mut Context) -> &PhaseAction {
+    &self.action
   }
 
   fn draw(&self, ctx: &mut Context) -> GameResult {
@@ -38,5 +40,15 @@ impl GamePhase for TitlePhase {
     graphics::draw(ctx, &self.start, param)?;
 
     Ok(())
+  }
+
+  fn key_down_event(&mut self, _ctx: &mut Context, keycode: KeyCode) {
+    if let KeyCode::Return = keycode {
+      self.action = PhaseAction::Next;
+    }
+  }
+
+  fn next(&self, _ctx: &mut Context) -> Box<dyn GamePhase> {
+    Box::from(EndPhase::new())
   }
 }

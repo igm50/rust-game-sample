@@ -1,7 +1,7 @@
 use crate::phase::*;
 use ggez::event::EventHandler;
+use ggez::input::keyboard::*;
 use ggez::*;
-use std::boxed::Box;
 
 pub struct MainState {
   phase: Box<dyn GamePhase>,
@@ -19,6 +19,10 @@ impl EventHandler for MainState {
   fn update(&mut self, ctx: &mut Context) -> GameResult {
     match self.phase.update(ctx) {
       PhaseAction::Continue => Ok(()),
+      PhaseAction::Next => {
+        self.phase = self.phase.next(ctx);
+        Ok(())
+      }
     }
   }
 
@@ -28,5 +32,15 @@ impl EventHandler for MainState {
     self.phase.draw(ctx)?;
 
     graphics::present(ctx)
+  }
+
+  fn key_down_event(
+    &mut self,
+    ctx: &mut Context,
+    keycode: KeyCode,
+    _keymods: KeyMods,
+    _repeat: bool,
+  ) {
+    self.phase.key_down_event(ctx, keycode);
   }
 }
