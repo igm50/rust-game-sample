@@ -1,21 +1,39 @@
-// mod image;
-mod phase;
-mod state;
+use amethyst::{
+    prelude::*,
+    renderer::{
+        plugins::{RenderFlat2D, RenderToWindow},
+        types::DefaultBackend,
+        RenderingBundle,
+    },
+    utils::application_root_dir,
+};
 
-use ggez::*;
-use state::MainState;
+pub struct GameState;
 
-fn main() {
-    let resource_dir = std::path::Path::new("./resources");
+impl SimpleState for GameState {}
 
-    let conf = conf::Conf::new();
-    let (ref mut ctx, ref mut event_loop) = ContextBuilder::new("sounder", "jintz")
-        .add_resource_path(resource_dir)
-        .conf(conf)
-        .build()
-        .unwrap();
+const CONFIG_DIR: &str = "config";
+const CONFIG_FILE: &str = "display.ron";
+const ASSETS_DIR: &str = "assets";
 
-    let ref mut state = MainState::new(ctx).unwrap();
+fn main() -> amethyst::Result<()> {
+    amethyst::start_logger(Default::default());
 
-    event::run(ctx, event_loop, state).unwrap();
+    let app_root = application_root_dir()?;
+    let assets_dir = app_root.join(ASSETS_DIR);
+    let display_config_path = app_root.join(CONFIG_DIR).join(CONFIG_FILE);
+
+    let game_data = GameDataBuilder::default().with_bundle(
+        RenderingBundle::<DefaultBackend>::new()
+            .with_plugin(
+                RenderToWindow::from_config_path(display_config_path)?
+                    .with_clear([0.0, 0.0, 0.0, 1.0]),
+            )
+            .with_plugin(RenderFlat2D::default()),
+    )?;
+
+    let mut game = Application::new(assets_dir, GameState, game_data)?;
+    game.run();
+
+    Ok(())
 }
